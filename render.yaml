@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: maquinarias
+    env: docker
+    plan: free
+    dockerfilePath: Dockerfile
+    region: oregon  # Change if you prefer a different region
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: docker
+      - key: DATABASE_URL
+        sync: false  # This will be set by the PostgreSQL add-on
+      - key: DATABASE_USERNAME
+        sync: false  # This will be set by the PostgreSQL add-on
+      - key: DATABASE_PASSWORD
+        sync: false  # This will be set by the PostgreSQL add-on
+      - key: UPLOAD_DIR
+        value: /app/uploads
+
+databases:
+  - name: maquinarias-db
+    plan: free
+    region: oregon  # Same region as your service
+    databaseName: maquinarias
+    user: maquinarias_user

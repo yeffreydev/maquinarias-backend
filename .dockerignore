@@ -1,0 +1,41 @@
+# Dependencies
+.gradle/
+build/
+
+# Git
+.git
+.gitignore
+
+# IDE
+*.swp
+*~
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment
+.env
+*.env
+
+# IDE specific
+*.class
+*.jar
+*.war
+
+# Gradle
+.gradle/
+build/
+!build/libs/*.jar
+
+# Local config
+application.properties

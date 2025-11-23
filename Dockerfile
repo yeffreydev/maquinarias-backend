@@ -1,10 +1,13 @@
 # Use OpenJDK 21 based on your project requirements
 FROM openjdk:21-jdk-slim
 
+# Install curl for health checks if needed
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy Gradle files first (for better caching)
+# Copy Gradle wrapper and build files
 COPY gradle ./gradle
 COPY gradlew .
 COPY gradlew.bat .
@@ -24,10 +27,10 @@ COPY src ./src
 RUN ./gradlew bootJar --no-daemon
 
 # Create uploads directory for file storage
-RUN mkdir -p uploads
+RUN mkdir -p /app/uploads
 
 # Expose the port that the application will run on
 EXPOSE 8080
 
 # Define the command to run the application
-ENTRYPOINT ["java", "-jar", "build/libs/maquinarias-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["sh", "-c", "java -Dspring.profiles.active=docker -jar build/libs/maquinarias-0.0.1-SNAPSHOT.jar"]
