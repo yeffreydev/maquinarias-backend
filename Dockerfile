@@ -1,8 +1,8 @@
-# Use OpenJDK 21 based on your project requirements
-FROM openjdk:21-jdk-slim
+# Use Eclipse Temurin OpenJDK 21 which is available on Docker Hub
+FROM eclipse-temurin:21-jdk-alpine
 
 # Install curl for health checks if needed
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache curl
 
 # Set the working directory inside the container
 WORKDIR /app
