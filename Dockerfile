@@ -1,22 +1,33 @@
-# Importing JDK and copying required files
-FROM openjdk:19-jdk AS build
+# Use OpenJDK 21 based on your project requirements
+FROM openjdk:21-jdk-slim
+
+# Set the working directory inside the container
 WORKDIR /app
-COPY pom.xml .
-COPY src src
 
-# Copy Maven wrapper
-COPY mvnw .
-COPY .mvn .mvn
+# Copy Gradle files first (for better caching)
+COPY gradle ./gradle
+COPY gradlew .
+COPY gradlew.bat .
+COPY build.gradle .
+COPY settings.gradle .
 
-# Set execution permission for the Maven wrapper
-RUN chmod +x ./mvnw
-RUN ./mvnw clean package -DskipTests
+# Make gradlew executable
+RUN chmod +x ./gradlew
 
-# Stage 2: Create the final Docker image using OpenJDK 19
-FROM openjdk:19-jdk
-VOLUME /tmp
+# Download dependencies (this layer will be cached if dependencies don't change)
+RUN ./gradlew dependencies --no-daemon
 
-# Copy the JAR from the build stage
-COPY --from=build /app/target/*.jar app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+# Copy the rest of the application source code
+COPY src ./src
+
+# Build the application
+RUN ./gradlew bootJar --no-daemon
+
+# Create uploads directory for file storage
+RUN mkdir -p uploads
+
+# Expose the port that the application will run on
 EXPOSE 8080
+
+# Define the command to run the application
+ENTRYPOINT ["java", "-jar", "build/libs/maquinarias-0.0.1-SNAPSHOT.jar"]
