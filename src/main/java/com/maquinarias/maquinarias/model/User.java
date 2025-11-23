@@ -1,7 +1,9 @@
 package com.maquinarias.maquinarias.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -23,4 +25,8 @@ public class User {
 
     @Column(nullable = false)
     private String fullname;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Alquiler> alquileres;
 }

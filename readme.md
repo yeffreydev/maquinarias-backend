@@ -15,3 +15,5 @@ yeffreyespinoza@yeffreys-MacBook-Air maquinarias % kill -9 55836
 
 en application.properties para indicar la conexcoin
 en build.gradle dependencias
+
+como poner los tests
